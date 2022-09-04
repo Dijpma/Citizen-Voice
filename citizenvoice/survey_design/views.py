@@ -1,8 +1,13 @@
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 from django.shortcuts import render
 from django.contrib.auth.forms import UserCreationForm
 from apiapp.views import SurveyViewSet, QuestionViewSet
 from django.contrib.auth.models import User
+from django.template.loader import render_to_string
+from django.utils.timezone import now
+
+from .forms import SurveyCreationForm
 # from .models import Question, Survey
 
 
@@ -13,6 +18,7 @@ def index(request):
     form = UserCreationForm()
     return render(request, 'survey_design/index.html')
 
+
 @login_required
 def survey(request):
     context = {
@@ -22,6 +28,7 @@ def survey(request):
         'surveys': User.objects.get(id=request.user.id).survey_set.all(),
     }
     return render(request, 'survey_design/survey.html', context)
+
 
 @login_required
 def survey_detail(request, survey_id):
@@ -38,6 +45,7 @@ def survey_detail(request, survey_id):
         # pass for now, we might add some warning in the future
         raise e
     return render(request, 'survey_design/survey.html', context)
+
 
 @login_required
 def question_detail(request, survey_id, question_order):
@@ -59,3 +67,38 @@ def question_detail(request, survey_id, question_order):
         # pass for now, we might add some warning in the future
         raise e
     return render(request, 'survey_design/survey.html', context)
+
+
+@login_required
+def survey_create(request):
+    if request.method == 'POST':
+        form = SurveyCreationForm(request.POST)
+    else:
+        form = SurveyCreationForm()
+        pass
+    return save_survey_form(request, form, 'survey_design/survey.html')
+
+
+def save_survey_form(request, form, template):
+    data = dict()
+    if request.method == 'POST':
+        if form.is_valid():
+            # TODO: override form.is_valid to autofill gaps
+            survey_obj = form.save(commit=False)
+            survey_obj.display_method = 1
+            survey_obj.publish_date = now()
+            survey_obj.expire_date = now()
+            survey_obj.author_id = request.user.id
+            survey_obj.save()
+            # form.save()
+            data['form_is_valid'] = True
+            print("Form Is Valid")
+        else:
+            # TODO: handle else case of form validation
+            data['form_is_valid'] = False
+            print("Form Not Valid")
+            print(form.errors)
+
+    context = {'form': form}
+    data['html-form'] = render_to_string(template, context, request=request)
+    return JsonResponse(data)

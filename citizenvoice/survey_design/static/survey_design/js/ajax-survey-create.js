@@ -1,5 +1,5 @@
 //import * as superHeroes from './ajax-survey.js';
-// import {marvel} from "./ajax-survey";
+import { test } from "./ajax";
 
 $(document).ready(
     function() {
@@ -91,6 +91,8 @@ $(document).ready(
 
         let survey_link = $('.survey-link-select');
         survey_link.each(survey_link_behaviour);
+
+        test()
     }
 );
 

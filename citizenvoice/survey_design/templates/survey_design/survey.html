@@ -50,7 +50,7 @@
                 <div class="sidebar-component">
                     <div class="sidebar-heading border-bottom bg-light">
                         <div class="sidebar-heading-text">Questions</div>
-                        <button class="sidebar-heading-button"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                        <button id="sidebar-left-button-add-question" class="sidebar-heading-button"><i class="fa fa-plus" aria-hidden="true"></i></button>
                     </div>
                     <div id="sidebar-left-question-list" class="list-group list-group-flush">
                         {% for question in questions %}
@@ -83,5 +83,6 @@
 <!-- Core theme JS-->
 <script src="{% static 'survey_design/js/survey.js' %}"></script>
 <script src="{% static 'survey_design/js/ajax-survey-create.js' %}"></script>
+<script src="{% static 'survey_design/js/add_question.js' %}"></script>
 </body>
 </html>

@@ -11494,3 +11494,10 @@ html, body, #page-content-wrapper /*, and all other map parent selectors*/ {
 #sidebar-left-question-list {
     max-width: 100%;
 }
+
+#ajax-container-map-sidebar .question_types {
+    visibility: hidden;
+}
+
+#ajax-container-map-sidebar .sidebar-survey-form {
+}

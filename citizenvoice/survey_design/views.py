@@ -8,8 +8,11 @@ from django.contrib.auth.models import User
 from django.template.loader import render_to_string
 from django.utils.timezone import now
 from apiapp.serializers import SurveySerializer
+from apiapp.models.question import Question
 
 from .forms import SurveyCreationForm
+
+import re
 
 # Create your views here.
 
@@ -24,7 +27,8 @@ def survey(request):
     context = {
         'title': 'Survey Design',
         'surveys': SurveyViewSet.GetSurveyByDesigner(request.user.id),
-        'questions': QuestionViewSet.GetQuestionBySurvey(SurveyViewSet.GetSurveyByDesigner(request.user.id)[0])
+        'questions': QuestionViewSet.GetQuestionBySurvey(SurveyViewSet.GetSurveyByDesigner(request.user.id)[0]),
+        'question_types': [re.sub(r'_', ' ', re.sub(r'-', ' ', choice[0])) for choice in Question._meta.get_field('question_type').choices]
     }
     return render(request, 'survey_design/survey.html', context)
 

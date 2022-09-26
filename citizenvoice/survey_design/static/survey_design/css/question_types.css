@@ -1,0 +1,14 @@
+.question_types_content {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: start;
+}
+
+.btn-sidebar-question-type {
+    flex-basis: calc(100%/3);
+    width: calc(100%/3);
+    max-width: calc(100%/3);
+    height: 100px;
+    max-height: 100px;
+}

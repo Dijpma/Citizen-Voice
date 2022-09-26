@@ -1,0 +1,9 @@
+<div id="sidebar-map-container-id-question-type" class="sidebar-map-container question_types" onClick="closeSidebar()">
+    <div id="sidebar-map-content" class="sidebar-map-content question_types_content" onClick="event.stopPropagation()">
+        {% for type in question_types %}
+            <button type="button" class="btn btn-outline-secondary btn-square-md btn-sidebar-question-type" data-mdb-ripple-color="dark">
+              {{ type }}
+            </button>
+        {% endfor %}
+    </div>
+</div>

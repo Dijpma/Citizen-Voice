@@ -24,6 +24,7 @@
     <!-- Icons    -->
     <!-- <script src="https://unpkg.com/boxicons@2.1.2/dist/boxicons.js"></script>-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'survey_design/css/map-sidebar.css' %}">
 </head>
 
 <body>
@@ -33,20 +34,31 @@
 
         <div class="container-main">
             <div id="sidebar-wrapper-left">
-                 <div class="sidebar-heading border-bottom bg-light">
-                     <div class="sidebar-heading-text">Surveys</div>
-                     <button id="sidebar-left-survey-add" class="sidebar-heading-button"><i class="fa fa-plus" aria-hidden="true"></i></button>
-                </div>
-                <div id="sidebar-left-survey-list" class="list-group list-group-flush">
-                    {% for survey in surveys %}
-                    <div class="limit">
-                         <a class="survey-link-select list-group-item list-group-item-action list-group-item-light p-3" href="{% url 'survey-edit' survey_id=survey.pk %}">{{ survey.name }}</a>
+                <div class="sidebar-component">
+                     <div class="sidebar-heading border-bottom bg-light">
+                         <div class="sidebar-heading-text">Surveys</div>
+                         <button id="sidebar-left-survey-add" class="sidebar-heading-button"><i class="fa fa-plus" aria-hidden="true"></i></button>
                     </div>
-                    {% endfor %}
+                    <div id="sidebar-left-survey-list" class="list-group list-group-flush">
+                        {% for survey in surveys %}
+                        <div class="limit">
+                             <a class="survey-link-select list-group-item list-group-item-action list-group-item-light p-3" href="{% url 'survey-edit' survey_id=survey.pk %}">{{ survey.name }}</a>
+                        </div>
+                        {% endfor %}
+                    </div>
                 </div>
-                <div class="sidebar-heading border-bottom bg-light">
-                    <div class="sidebar-heading-text">Questions</div>
-                    <button class="sidebar-heading-button"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                <div class="sidebar-component">
+                    <div class="sidebar-heading border-bottom bg-light">
+                        <div class="sidebar-heading-text">Questions</div>
+                        <button class="sidebar-heading-button"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                    </div>
+                    <div id="sidebar-left-question-list" class="list-group list-group-flush">
+                        {% for question in questions %}
+                        <div class="limit">
+                             <a class="question-link-select list-group-item list-group-item-action list-group-item-light p-3" href="{% url 'question-edit' question_id=question.pk %}">{{ question.text }}</a>
+                        </div>
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
 

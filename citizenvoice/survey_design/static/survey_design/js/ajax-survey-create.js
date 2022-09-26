@@ -117,8 +117,6 @@ $(function() {
         return cookieValue;
     }
     var csrftoken = getCookie('csrftoken');
-    alert("CSRFTOKEN");
-    alert(csrftoken);
     /*
     The functions below will create a header with csrftoken
     */

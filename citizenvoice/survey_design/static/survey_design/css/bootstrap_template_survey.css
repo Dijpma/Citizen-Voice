@@ -11482,3 +11482,15 @@ html, body, #page-content-wrapper /*, and all other map parent selectors*/ {
     overflow-y: scroll;
     max-height: 30%;
 }
+
+.sidebar-component {
+  height: 40%;
+}
+
+.question-link-select {
+    overflow:
+}
+
+#sidebar-left-question-list {
+    max-width: 100%;
+}

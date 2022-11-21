@@ -87,9 +87,13 @@ $(document).ready(
 
         let button_add_survey = $('#sidebar-left-survey-add')
         button_add_survey.on("click", function(event) {
+            $("#ajax-container-map-sidebar").children('div').each(
+                function() {
+                    $(this).css("visibility", "hidden")
+                }
+            );
             $('#ajax-container-map-sidebar .sidebar-survey-form').css("visibility", "visible")
             openSidebar()
-            $('#ajax-container-map-sidebar .question_types').css("visibility", "hidden")
         });
 
         let survey_link = $('.survey-link-select');

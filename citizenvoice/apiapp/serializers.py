@@ -49,7 +49,7 @@ class SurveySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Survey
         fields = ('id', 'name', 'description', 'is_published', 'need_logged_user', 'editable_answers', 'display_method',
-         'template', 'publish_date', 'expire_date', 'redirect_url', 'author')
+         'template', 'publish_date', 'expire_date', 'redirect_url', 'designer')
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     """

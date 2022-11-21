@@ -12,3 +12,42 @@
     height: 100px;
     max-height: 100px;
 }
+
+#question-type-text {
+    visibility: hidden;
+}
+
+.question_type {
+    visibility: hidden;
+}
+
+.question-form-default {
+    width: 80%;
+    margin: 20px;
+}
+
+.form-item-question-type {
+    margin-top: 15px;
+}
+
+.question-text-field {
+    min-height: 100px;
+}
+
+.question-text-field::placeholder {
+    position: relative;
+    top: 5%;
+}
+
+.btn-array {
+    display: flex;
+    flex-direction: row;
+}
+
+.btn-array .btn {
+    flex: 1 1 100%;
+}
+
+.margin-top-5pc {
+    margin-top: 5%;
+}

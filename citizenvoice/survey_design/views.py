@@ -146,3 +146,9 @@ def survey_delete(request, survey_id):
     data['surveys'] = SurveySerializer(surveys, many=True, context={'request': request}).data
     data['html_form'] = render_to_string('survey_design/submodules/ajax/ajax-sidebar-left-surveys.html', context, request=request)
     return JsonResponse(data)
+
+@login_required
+def store_question(request, survey_id):
+    survey = Survey.objects.get(id=survey_id)
+    if request.method == 'POST':
+        survey

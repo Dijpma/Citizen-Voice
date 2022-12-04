@@ -3,11 +3,15 @@
     <q-page>
       <div class="padding-16">
         <h2>My Surveys</h2>
-        <q-list bordered class="rounded-borders" style="max-width: 800px">
-<!--          <q-item-label header>Google Inbox style</q-item-label>-->
-          <list-item-survey-design v-for="survey in surveys" :survey_object="survey"> </list-item-survey-design>
-<!--          <q-separator/>-->
-        </q-list>
+        <div class="custom-sub-container">
+          <q-list bordered class="rounded-borders custom-width-60-pc" style="max-width: 800px">
+  <!--          <q-item-label header>Google Inbox style</q-item-label>-->
+            <list-item-survey-design v-for="survey in surveys" :survey_object="survey"> </list-item-survey-design>
+  <!--          <q-separator/>-->
+          </q-list>
+
+          <q-btn color="white" text-color="black" label="Add survey" />
+        </div>
       </div>
     </q-page>
   </NuxtLayout>
@@ -62,6 +66,17 @@ const { data: surveys } = await useAsyncData(() => $fetch(url));
   min-width: 100%;
   min-height: 100%;
   background: #b02a37;
+}
+
+.custom-sub-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: flex-start;
+}
+
+.custom-width-60-pc {
+  width: 60%;
 }
 
 .padding-16{

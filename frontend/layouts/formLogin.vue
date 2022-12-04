@@ -31,13 +31,15 @@
 <!--        <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" />-->
 <!--      </div>-->
     </q-form>
-
+    <q-btn color="white" text-color="black" label="Login" />
   </div>
 </template>
 
 <script>
+import BaseButton from "../components/BaseButton";
 export default {
-  name: "formLogin"
+  name: "formLogin",
+  components: {BaseButton}
 }
 </script>
 

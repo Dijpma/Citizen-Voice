@@ -5,9 +5,8 @@
         <h2>My Surveys</h2>
         <q-list bordered class="rounded-borders" style="max-width: 800px">
 <!--          <q-item-label header>Google Inbox style</q-item-label>-->
-          <list-item-survey-design></list-item-survey-design>
-          <q-separator spaced />
-          <list-item-survey-design></list-item-survey-design>
+          <list-item-survey-design v-for="survey in surveys" :survey_object="survey"> </list-item-survey-design>
+<!--          <q-separator/>-->
         </q-list>
       </div>
     </q-page>
@@ -19,44 +18,15 @@ import { ref } from 'vue'
 import BaseButton from "../components/BaseButton";
 import ListItemSurveyDesign from "../components/ListItemSurveyDesign";
 
-const menuList = [
-  {
-    icon: 'inbox',
-    label: 'Inbox',
-    separator: true
-  },
-  {
-    icon: 'send',
-    label: 'Outbox',
-    separator: false
-  },
-  {
-    icon: 'delete',
-    label: 'Trash',
-    separator: false
-  },
-  {
-    icon: 'error',
-    label: 'Spam',
-    separator: true
-  },
-  {
-    icon: 'settings',
-    label: 'Settings',
-    separator: false
-  },
-  {
-    icon: 'feedback',
-    label: 'Send Feedback',
-    separator: false
-  },
-  {
-    icon: 'help',
-    iconColor: 'primary',
-    label: 'Help',
-    separator: false
-  }
-]
+import { formatDate } from "~/utils/formatData"
+/**
+ * All `/api/**` are proxies pointing to the local or production server of the backend.
+ */
+const url = "/api/surveys/"
+
+const { data: surveys } = await useAsyncData(() => $fetch(url));
+
+
 </script>
 
 <style lang="scss" scoped>

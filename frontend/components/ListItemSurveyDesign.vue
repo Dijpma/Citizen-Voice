@@ -1,11 +1,11 @@
 <template>
-    <q-item>
+    <q-item clickable>
       <q-item-section avatar top>
         <q-icon name="description" color="black" size="30px" />
       </q-item-section>
 
       <q-item-section top class="col-2 gt-sm">
-        <q-item-label class="q-mt-sm">My survey's name</q-item-label>
+        <q-item-label class="q-mt-sm">{{survey_object.name}}</q-item-label>
       </q-item-section>
 
       <q-item-section top>
@@ -35,7 +35,10 @@
 import { matAllInbox } from '@quasar/extras/material-icons'
 
 export default {
-  name: "ListItemSurveyDesign"
+  name: "ListItemSurveyDesign",
+  props: {
+    survey_object: Object
+  }
 }
 </script>
 

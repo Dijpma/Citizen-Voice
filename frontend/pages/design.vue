@@ -2,7 +2,13 @@
   <NuxtLayout name="default">
     <q-page>
       <div class="padding-16">
-        <h2>Survey Design</h2>
+        <h2>My Surveys</h2>
+        <q-list bordered class="rounded-borders" style="max-width: 800px">
+<!--          <q-item-label header>Google Inbox style</q-item-label>-->
+          <list-item-survey-design></list-item-survey-design>
+          <q-separator spaced />
+          <list-item-survey-design></list-item-survey-design>
+        </q-list>
       </div>
     </q-page>
   </NuxtLayout>
@@ -11,6 +17,7 @@
 <script setup>
 import { ref } from 'vue'
 import BaseButton from "../components/BaseButton";
+import ListItemSurveyDesign from "../components/ListItemSurveyDesign";
 
 const menuList = [
   {

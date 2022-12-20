@@ -1,19 +1,8 @@
 <template>
   <NuxtLayout name="default">
-    <q-page>
-      <div class="padding-16">
-        <h2>My Surveys</h2>
-        <div class="custom-sub-container">
-          <q-list bordered class="rounded-borders custom-width-60-pc" style="max-width: 800px">
-            <!--          <q-item-label header>Google Inbox style</q-item-label>-->
-            <list-item-survey-design v-for="survey in surveys" :survey_object="survey"> </list-item-survey-design>
-            <!--          <q-separator/>-->
-          </q-list>
-
-          <q-btn color="white" text-color="black" label="Add survey" />
-        </div>
-      </div>
-    </q-page>
+<!--    <breadcrums></breadcrums>-->
+    <survey-design-select-survey @edit_survey="(survey) => go_edit_survey(survey)" v-if="is_survey_select" :surveys="surveys_list"></survey-design-select-survey>
+    <survey-design-edit-survey @return_page="() => go_select_survey()" v-else :survey="current_survey_to_edit"></survey-design-edit-survey>
   </NuxtLayout>
 </template>
 
@@ -22,11 +11,34 @@ import { ref } from 'vue'
 import BaseButton from "../components/BaseButton";
 import ListItemSurveyDesign from "../components/ListItemSurveyDesign";
 import { formatDate } from "~/utils/formatData"
+import SurveyDesignSelectSurvey from "../layouts/surveyDesignSelectSurvey";
+import SurveyDesignEditSurvey from "../layouts/surveyDesignEditSurvey";
 /**
  * All `/api/**` are proxies pointing to the local or production server of the backend.
  */
 const url = "/api/surveys/"
-const { data: surveys } = await useAsyncData(() => $fetch(url));
+const { data: surveys_list } = await useAsyncData(() => $fetch(url));
+</script>
+
+<script>
+export default {
+  data() {
+    return {
+      is_survey_select: true,
+      current_survey_to_edit: null
+    }
+  },
+  methods: {
+    go_edit_survey: function (survey) {
+      this.current_survey_to_edit = survey;
+      console.log(this.current_survey_to_edit)
+      this.is_survey_select=false;
+    },
+    go_select_survey: function () {
+      this.is_survey_select = true;
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>

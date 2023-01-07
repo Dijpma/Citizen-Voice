@@ -4,28 +4,29 @@
       <q-btn @click="back_to_page()" flat round color="primary" icon="arrow_back" />
       <h5>Survey: {{survey.name}}</h5>
           <div class="custom-list-container">
-              <q-list bordered>
-                <q-item v-for="question in questions" clickable v-ripple>
-                  <q-item-section top class="col-3 gt-sm">
-                    <q-item-label class="q-mt-sm">{{question.text}}</q-item-label>
-                  </q-item-section>
+            <question-table :questions_prop="this.questions"></question-table>
+<!--              <q-list bordered>-->
+<!--                <q-item v-for="question in questions" clickable v-ripple>-->
+<!--                  <q-item-section top class="col-3 gt-sm">-->
+<!--                    <q-item-label class="q-mt-sm">{{question.text}}</q-item-label>-->
+<!--                  </q-item-section>-->
 
-                  <q-item-section top>
-                  </q-item-section>
+<!--                  <q-item-section top>-->
+<!--                  </q-item-section>-->
 
-                  <q-item-section>
+<!--                  <q-item-section>-->
 
-                  </q-item-section>
-                  <q-item-section top side>
-                    <div class="text-grey-8 q-col-gutter-xs">
-<!--                      <q-item-label>Required</q-item-label>-->
-                      <q-checkbox v-bind="question.required"/>
-                      <q-btn class="gt-xs" size="12px" flat dense round icon="delete" />
+<!--                  </q-item-section>-->
+<!--                  <q-item-section top side>-->
+<!--                    <div class="text-grey-8 q-col-gutter-xs">-->
+<!--&lt;!&ndash;                      <q-item-label>Required</q-item-label>&ndash;&gt;-->
+<!--                      <q-checkbox v-bind="question.required"/>-->
+<!--                      <q-btn class="gt-xs" size="12px" flat dense round icon="delete" />-->
 
-                    </div>
-                  </q-item-section>
-                </q-item>
-              </q-list>
+<!--                    </div>-->
+<!--                  </q-item-section>-->
+<!--                </q-item>-->
+<!--              </q-list>-->
           </div>
       <q-btn @click="" color="white" text-color="black" label="Add question" />
     </div>
@@ -36,9 +37,10 @@
 import { ref } from 'vue'
 import BaseButton from "../components/BaseButton";
 import Breadcrums from "../components/breadcrums";
+import QuestionTable from "../components/questionTable";
 export default {
   name: "surveyDesignEditSurvey",
-  components: {Breadcrums, BaseButton},
+  components: {QuestionTable, Breadcrums, BaseButton},
   props: {
     survey: Object
   },

@@ -26,6 +26,18 @@
             </div>
         </q-page>
     </NuxtLayout>
+
+  <!--  <NuxtLayout name="default">-->
+<!--    <q-page style="display: flex;justify-content: center;align-items: center">-->
+<!--      <div class="padding-16">-->
+<!--        <center-div>-->
+<!--          <template v-slot:centered-component>-->
+<!--            <form-login></form-login>-->
+<!--          </template>-->
+<!--        </center-div>-->
+<!--      </div>-->
+<!--    </q-page>-->
+<!--  </NuxtLayout>-->
 </template>
 
 <script setup>

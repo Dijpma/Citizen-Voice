@@ -1,34 +1,17 @@
 <template>
   <q-page>
     <div class="padding-16">
-      <q-btn @click="back_to_page()" flat round color="primary" icon="arrow_back" />
-      <h5>Survey: {{survey.name}}</h5>
-          <div class="custom-list-container">
-            <question-table :questions_prop="this.questions"></question-table>
-<!--              <q-list bordered>-->
-<!--                <q-item v-for="question in questions" clickable v-ripple>-->
-<!--                  <q-item-section top class="col-3 gt-sm">-->
-<!--                    <q-item-label class="q-mt-sm">{{question.text}}</q-item-label>-->
-<!--                  </q-item-section>-->
+      <h2>Survey: {{survey.name}}</h2>
+      <div class="custom-sub-container">
+        <q-list bordered class="rounded-borders custom-width-60-pc" style="max-width: 800px">
+          <list-item-question @edit_survey="(survey_var) => $emit('edit_survey', survey_var)" v-for="question in this.questions" :question_object="this.questions"> </list-item-question>
+        </q-list>
+        <q-input v-model="textName" label="Name" />
+        <q-input v-model="textDescription" label="Description" />
+        <q-btn @click="addNewQuestion" color="white" text-color="black" label="Add question" />
 
-<!--                  <q-item-section top>-->
-<!--                  </q-item-section>-->
-
-<!--                  <q-item-section>-->
-
-<!--                  </q-item-section>-->
-<!--                  <q-item-section top side>-->
-<!--                    <div class="text-grey-8 q-col-gutter-xs">-->
-<!--&lt;!&ndash;                      <q-item-label>Required</q-item-label>&ndash;&gt;-->
-<!--                      <q-checkbox v-bind="question.required"/>-->
-<!--                      <q-btn class="gt-xs" size="12px" flat dense round icon="delete" />-->
-
-<!--                    </div>-->
-<!--                  </q-item-section>-->
-<!--                </q-item>-->
-<!--              </q-list>-->
-          </div>
-      <q-btn @click="" color="white" text-color="black" label="Add question" />
+        <!--        <q-btn color="white" text-color="black" label="Add survey" />-->
+      </div>
     </div>
   </q-page>
 </template>
@@ -38,6 +21,8 @@ import { ref } from 'vue'
 import BaseButton from "../components/BaseButton";
 import Breadcrums from "../components/breadcrums";
 import QuestionTable from "../components/questionTable";
+
+
 export default {
   name: "surveyDesignEditSurvey",
   components: {QuestionTable, Breadcrums, BaseButton},
@@ -52,8 +37,11 @@ export default {
   },
   async created() {
     // props are exposed on `this`
-    const url = "/api/questions"
-    const { data: question_list } = await useAsyncData(() => $fetch(url));
+    // const url = "/api/questions"
+    const url = "/api/questions/"
+
+    // const { data: questions, refresh } = await useAsyncData(() => $cmsApi(url));
+    const { data: question_list, refresh } = await useAsyncData(() => $cmsApi(url));
     this.questions = question_list;
   },
   methods: {

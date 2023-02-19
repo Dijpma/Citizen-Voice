@@ -1,18 +1,3 @@
-<!--      <q-page>-->
-<!--            <div class="padding-16">-->
-<!--                <h2>My Surveys</h2>-->
-<!--                <div class="custom-sub-container">-->
-<!--                    <q-list bordered class="rounded-borders custom-width-60-pc" style="max-width: 800px">-->
-<!--                        <list-item-survey-design v-for="survey in surveys" :survey_object="survey" :refresh="refresh">-->
-<!--                        </list-item-survey-design>-->
-<!--                    </q-list>-->
-<!--                    <q-input v-model="textName" label="Name" />-->
-<!--                    <q-input v-model="textDescription" label="Description" />-->
-<!--                    <q-btn color="white" text-color="black" label="Add survey" @click="addNewSurvey" />-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </q-page>-->
-
 <template>
   <q-page>
     <div class="padding-16">
@@ -39,6 +24,20 @@ import { formatDate } from "~/utils/formatData"
 import { useSurveyStore } from "~/stores/survey"
 import SurveyDesignSelectSurvey from "../layouts/surveyDesignSelectSurvey";
 import SurveyDesignEditSurvey from "../layouts/surveyDesignEditSurvey";
+
+const textName = ref(null)
+const textDescription = ref(null)
+
+// set default expire date 100 days after current day
+const url = "/api/surveys/"
+const surveyStore = useSurveyStore()
+var expire_date = new Date();
+var current_date = new Date();
+expire_date.setDate(expire_date.getDate() + 100);
+current_date.setDate(current_date.getDate());
+
+// Add a new survey using the surveyStore, based on what is entered in the field.
+
 const addNewSurvey = async () => {
   await surveyStore.createSurvey(textName.value, textDescription.value, current_date, expire_date)
   refresh()

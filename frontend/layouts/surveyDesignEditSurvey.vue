@@ -6,8 +6,8 @@
         <q-list bordered class="rounded-borders custom-width-60-pc" style="max-width: 800px">
           <list-item-question @edit_survey="(survey_var) => $emit('edit_survey', survey_var)" v-for="question in this.questions" :question_object="this.questions"> </list-item-question>
         </q-list>
-        <q-input v-model="textName" label="Name" />
-        <q-input v-model="textDescription" label="Description" />
+        <q-input v-model="questionName" label="Name" />
+        <q-input v-model="questionDescription" label="Description" />
         <q-btn @click="addNewQuestion" color="white" text-color="black" label="Add question" />
 
         <!--        <q-btn color="white" text-color="black" label="Add survey" />-->

@@ -129,18 +129,46 @@ class SurveyViewSet(viewsets.ModelViewSet):
     Survey ViewSet used internally to query data from database.
 
     """
-    # permission_classes = [IsAuthenticated]
+#     permission_classes = [IsAuthenticated]
     serializer_class = SurveySerializer
 
-    def get_queryset(response):
+    @action(detail=False, methods=['GET'], url_path='my-surveys')
+    def my_surveys(self, request, *args, **kwargs):
+#         print("Getting my surveys...")
+        user = self.request.user
+        surveys = Survey.objects.all().filter(designer=1).order_by('name')
+        survey_ser = self.get_serializer(surveys, many=True)
+        print(surveys)
+        print(survey_ser.data)
+#         print(surveys)
+#         print(type(self.request.user))
+#         print(self.request.user)
+#         resp = HttpResponse(serializer.data, headers={
+#             'Content-Type: application/json'
+#         })
+        print("Response:")
+#         print(resp)
+#         print(serializer.data)
+#         print("second resp:")
+#         print(JsonResponse(serializer.data))
+        #         return HttpResponse(serializer.data)
+        return JsonResponse({})
+
+    def get_queryset(self):
+        print("Getting all surveys...")
         """
         Returns a set of all Survey instances in the database.
 
         Return:
             queryset: containing all Survey instances
         """
-        queryset = Survey.objects.all().order_by('name')
-
+        user = self.request.user
+        #.filter(designer=user.id)
+        queryset = Survey.objects.all().filter(designer=user.id).order_by('name')
+        print(queryset)
+        print(type(self.request.user))
+        print(self.request.user)
+#         print(self.request.auth)
         return queryset
 
 

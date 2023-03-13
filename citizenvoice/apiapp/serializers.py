@@ -8,6 +8,7 @@
 from rest_framework import serializers
 from .models import Answer, Question, Survey, Response, PointLocation, PolygonLocation, LineStringLocation, MapView
 from django.contrib.auth.models import User
+from datetime import datetime
 
 #=============================================
 # Create serializer classes that allow for exposing certain model fields to be used in the API
@@ -52,6 +53,7 @@ class SurveySerializer(serializers.HyperlinkedModelSerializer):
         model = Survey
         fields = ('id', 'name', 'description', 'is_published', 'need_logged_user', 'editable_answers',
          'publish_date', 'expire_date', 'public_url', 'designer')
+
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     """

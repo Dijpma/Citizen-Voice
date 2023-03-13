@@ -10,7 +10,9 @@ from django.contrib.auth.models import User
 from datetime import datetime
 from django.http.response import JsonResponse
 from rest_framework.parsers import JSONParser
-from rest_framework.decorators import action 
+from rest_framework.decorators import action
+from rest_framework.response import Response as rf_response
+from datetime import datetime
 
 class AnswerViewSet(viewsets.ModelViewSet):
     """
@@ -132,27 +134,52 @@ class SurveyViewSet(viewsets.ModelViewSet):
 #     permission_classes = [IsAuthenticated]
     serializer_class = SurveySerializer
 
+    @action(detail=False, methods=['POST'], url_path='create-survey')
+    def create_survey(self, request, *args, **kwargs):
+        print("Creating a new survey...")
+
+        user = self.request.user
+        if type(user) is User:
+            survey_name = self.request.data["name"]
+            survey_description = self.request.data["description"]
+            once_up_a_time = datetime.now()
+            req = request
+            print("Survey name: ", survey_name)
+            print(type(user))
+            print(user)
+            print(req)
+
+            survey = Survey(name=survey_name, description=survey_description,
+             publish_date=once_up_a_time, expire_date=once_up_a_time, designer=user)
+            survey.save()
+            print(survey)
+        else:
+            print("User was anonymousyarn ")
+        return rf_response(None)
+
     @action(detail=False, methods=['GET'], url_path='my-surveys')
     def my_surveys(self, request, *args, **kwargs):
 #         print("Getting my surveys...")
         user = self.request.user
-        surveys = Survey.objects.all().filter(designer=1).order_by('name')
+        surveys = Survey.objects.all().filter(designer=user.id).order_by('name')
         survey_ser = self.get_serializer(surveys, many=True)
         print(surveys)
         print(survey_ser.data)
+        print("User ID: ", user.id)
 #         print(surveys)
 #         print(type(self.request.user))
 #         print(self.request.user)
 #         resp = HttpResponse(serializer.data, headers={
 #             'Content-Type: application/json'
 #         })
-        print("Response:")
+#         print("Response:")
 #         print(resp)
 #         print(serializer.data)
 #         print("second resp:")
 #         print(JsonResponse(serializer.data))
         #         return HttpResponse(serializer.data)
-        return JsonResponse({})
+#         return JsonResponse({})
+        return rf_response(survey_ser.data)
 
     def get_queryset(self):
         print("Getting all surveys...")
@@ -164,10 +191,10 @@ class SurveyViewSet(viewsets.ModelViewSet):
         """
         user = self.request.user
         #.filter(designer=user.id)
-        queryset = Survey.objects.all().filter(designer=user.id).order_by('name')
-        print(queryset)
-        print(type(self.request.user))
-        print(self.request.user)
+        queryset = Survey.objects.all().order_by('name')
+#         print(queryset)
+#         print(type(self.request.user))
+#         print(self.request.user)
 #         print(self.request.auth)
         return queryset
 

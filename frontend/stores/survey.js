@@ -35,6 +35,7 @@ export const useSurveyStore = defineStore('survey', {
             const csrftoken = user.getCookie('csrftoken');
             const token = user.userData.token
 
+
             const config = {
                 headers: {
                     'Content-Type': 'application/json',
@@ -45,7 +46,7 @@ export const useSurveyStore = defineStore('survey', {
                     name,
                     description,
                     publish_date,
-                    expire_date
+                    expire_date,
                 },
             }
 
@@ -54,7 +55,7 @@ export const useSurveyStore = defineStore('survey', {
                 config.headers['Authorization'] = `Token ${token}`
             }
 
-            const { data: register, pending, error } = await useAsyncData('createSurvey', () => $cmsApi('/api/surveys/', config))
+            const { data: register, pending, error } = await useAsyncData('createSurvey', () => $cmsApi('/api/surveys/create-survey/', config))
 
             if (error.value) {
                 let warnMessage = null
@@ -139,7 +140,7 @@ export const useSurveyStore = defineStore('survey', {
           }
 
           // alert("Send request")
-          const res = await useAsyncData('getSurveys', () => $cmsApi('/api/surveys', config))
+          const res = await useAsyncData('getSurveys', () => $cmsApi('/api/surveys/my-surveys/', config))
           // if (error.value) {
           //   let warnMessage = null
           //   for (const [key, value] of Object.entries(error._value.data)) {

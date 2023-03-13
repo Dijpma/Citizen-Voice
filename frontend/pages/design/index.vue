@@ -45,7 +45,8 @@ definePageMeta({
 
 const url = "/api/surveys/"
 const surveyStore = useSurveyStore()
-const { data: surveys, refresh } = await useAsyncData(() => $cmsApi(url));
+const { data: surveys } = await surveyStore.getSurveysOfCurrentUser();
+// const { data: surveys, refresh } = await useAsyncData(() => $cmsApi(url));
 var expire_date = new Date();
 var current_date = new Date();
 const textName = ref(null)

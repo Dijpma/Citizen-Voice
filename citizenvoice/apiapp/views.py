@@ -144,41 +144,19 @@ class SurveyViewSet(viewsets.ModelViewSet):
             survey_description = self.request.data["description"]
             once_up_a_time = datetime.now()
             req = request
-            print("Survey name: ", survey_name)
-            print(type(user))
-            print(user)
-            print(req)
 
             survey = Survey(name=survey_name, description=survey_description,
              publish_date=once_up_a_time, expire_date=once_up_a_time, designer=user)
             survey.save()
-            print(survey)
         else:
-            print("User was anonymousyarn ")
+            print("User was anonymous")
         return rf_response(None)
 
     @action(detail=False, methods=['GET'], url_path='my-surveys')
     def my_surveys(self, request, *args, **kwargs):
-#         print("Getting my surveys...")
         user = self.request.user
         surveys = Survey.objects.all().filter(designer=user.id).order_by('name')
         survey_ser = self.get_serializer(surveys, many=True)
-        print(surveys)
-        print(survey_ser.data)
-        print("User ID: ", user.id)
-#         print(surveys)
-#         print(type(self.request.user))
-#         print(self.request.user)
-#         resp = HttpResponse(serializer.data, headers={
-#             'Content-Type: application/json'
-#         })
-#         print("Response:")
-#         print(resp)
-#         print(serializer.data)
-#         print("second resp:")
-#         print(JsonResponse(serializer.data))
-        #         return HttpResponse(serializer.data)
-#         return JsonResponse({})
         return rf_response(survey_ser.data)
 
     def get_queryset(self):
@@ -190,14 +168,26 @@ class SurveyViewSet(viewsets.ModelViewSet):
             queryset: containing all Survey instances
         """
         user = self.request.user
-        #.filter(designer=user.id)
         queryset = Survey.objects.all().order_by('name')
-#         print(queryset)
-#         print(type(self.request.user))
-#         print(self.request.user)
-#         print(self.request.auth)
         return queryset
 
+    @action(detail=True, methods=['GET'], url_path='questions')
+    def get_questions_of_survey(self, request, pk=None):
+        print("Retreiving questions of survey...")
+        user = self.request.user
+        if type(user) is User:
+            survey = Survey.objects.get(id=pk)
+            if(survey.designer != user.id):
+                print("use is not the designer")
+                print(f"User id: {user.id} \nDesigner id: {survey.designer_id}")
+                rf_response(None)
+
+            questions = Question.objects.all().filter(survey_id=pk).order_by('order')
+            question_serializer = QuestionSerializer(questions, many=True, context={'request': request})
+            return rf_response(question_serializer.data)
+        else:
+            print("User was anonymous")
+        return rf_response(None)
 
     # @action(detail=True, methods=['post'])
     # def CreateSurvey(response):

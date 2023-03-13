@@ -5,7 +5,7 @@
             <v-card class="my-card">
                 <div class="text-h2 q-mt-sm q-mb-xs">Question {{ (current_question_index + 1) }}</div>
                 <div v-if="questions.length > 0" class="text-h5 q-mt-sm q-mb-xs">{{questions[current_question_index].text}}</div>
-                <div v-if="questions.length > 0" class="text-h5 q-mt-sm q-mb-xs">{{questions[current_question_index]}}</div>
+                <div v-if="questions.length > 0" class="text-h5 q-mt-sm q-mb-xs">{{questions}}</div>
                 <div v-else><p>This survey does not have any questions</p></div>
             </v-card>
         </div>
@@ -54,7 +54,7 @@ const survey_store = useSurveyStore()
 // const { data: surveys } = await surveyStore.getSurveysOfCurrentUser()
 
 const { data : questions } = await survey_store.getQuestionsOfSurvey(route.params._id)
-var current_question_index = 0
+let current_question_index = 0
 // const { data: survey } = await useAsyncData(() => $cmsApi(survey_url + route.params._id));
 
 // TODO: use an API to get n'th question of the selected survey
@@ -62,7 +62,7 @@ var current_question_index = 0
 // let demo_question = parseInt(route.params._question, 10) + 5
 // let { data: question } = await useAsyncData(() => $cmsApi(question_url + demo_question));
 
-const prevQuestion = async () => {
+const prevQuestion = () => {
     if(current_question_index > 0) {
       current_question_index -= 1
     }
@@ -75,11 +75,15 @@ const prevQuestion = async () => {
     // }
 }
 
-const nextQuestion = async () => {
+const nextQuestion = () => {
     // if this is not the last question:
     // return navigateTo('/survey/' + route.params._id + '/' + (parseInt(route.params._question, 10) + 1))
-    if(current_question_index < [questions.length-1]) {
+    current_question_index += 1
+
+    if(current_question_index < questions.length-1) {
       current_question_index += 1
+    } else {
+      alert("index would be out of bounds" + questions.length + ", " + current_question_index)
     }
 }
 

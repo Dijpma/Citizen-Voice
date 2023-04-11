@@ -5,7 +5,8 @@ import { useGlobalStore } from './global'
 export const useSurveyStore = defineStore('survey', {
     state: () => {
         return {
-            id: null
+            id: null,
+            questions_of_survey: {},
         }
     },
     getters: {

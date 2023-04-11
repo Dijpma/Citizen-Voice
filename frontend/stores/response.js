@@ -16,8 +16,8 @@ export const useStoreResponse = defineStore('response', {
             this.currentQuestion = questionNumber
         },
         async getResponse({ id }) {
-            console.log('id //> ', id)
-            const { data: survey } = await useAsyncData(() => $cmsApi('/api/surveys/' + id));
+            console.log('get response id //> ', id)
+            const { data: survey } = await useAsyncData(() => $cmsApi('/api/surveys/' + id + '/'));
             return survey
         },
         async createResponse({ id }) {
@@ -36,7 +36,7 @@ export const useStoreResponse = defineStore('response', {
                 },
             }
 
-            const { data: survey } = await useAsyncData(() => $cmsApi('/api/responses/' + id, config));
+            const { data: survey } = await useAsyncData(() => $cmsApi('/api/responses/' + id + '/', config));
 
             console.log(survey)
 

@@ -1,26 +1,9 @@
 <template>
     <NuxtLayout name="default">
         <div class="">
-            <!-- Question card: number & text -->
-            <v-card v-for="question in questions" class="my-card">
-                <div class="text-h2 q-mt-sm q-mb-xs">Question {{ question.order }}</div>
-                <div class="text-h5 q-mt-sm q-mb-xs">{{ question.text }}</div>
-            </v-card>
-
-
-            <div class="">
-                <!-- Map card
-          real v-if statement = (question.map_view != null || question.is_geospatial)-->
-                <!--            <v-card v-if="question.is_geospatial" style="min-width: 300px;" class="my-card col">-->
-                <!--                <div class="text-h5 q-mt-sm q-mb-xs">Map here</div>-->
-                <!--                <div id="map"></div>-->
-                <!--            </v-card>-->
-            </div>
-
-            <div class="my-card">
-                <div class="text-h2 q-mt-sm q-mb-xs">Question {{ $route.params._question }}</div>
-                <div class="text-h5 q-mt-sm q-mb-xs">{{ question.text }}</div>
-            </div>
+            <qt_text v-if="questions[current_question_index].question_type === 'text'" :question_index="current_question_index" :question="questions[current_question_index]"></qt_text>
+            <qt_multiple_choice v-if="questions[current_question_index].question_type === 'select'" :question_index="current_question_index" :question="questions[current_question_index]" ></qt_multiple_choice>
+            <qt_select_multiple v-if="questions[current_question_index].question_type === 'select_multiple'" :question_index="current_question_index" :question="questions[current_question_index]" ></qt_select_multiple>
         </div>
 
         <div class="q-pa-md row items-start q-gutter-md">
@@ -48,11 +31,9 @@
             </div>
 
             <!-- Answer card-->
-            <div class="my-card col">
-                <v-textarea name="title" v-model="answer_field" type="textarea" label="Give answer here"></v-textarea>
-            </div>
-
-
+<!--            <div class="my-card col">-->
+<!--                <v-textarea name="title" v-model="answer_field" type="textarea" label="Give answer here"></v-textarea>-->
+<!--            </div>-->
         </div>
 
         <!-- Navigation -->
@@ -76,24 +57,28 @@
 
 import { ref } from "vue"
 import { navigateTo } from "nuxt/app";
-import { useStoreResponse } from '~/stores/response'
+// import { useStoreResponse } from '~/stores/response'
 // import leaflet from "leaflet"
 import "leaflet/dist/leaflet.css";
 import { LMap, LTileLayer, LCircle, LControl } from "@vue-leaflet/vue-leaflet";
 
-const responseStore = useStoreResponse()
+// const responseStore = useStoreResponse()
 const question_url = "/api/questions/"
 const mapview_url = "/api/map_views/"
 
 const route = useRoute()
 // Fixme: Cleanup these functions
 import { useSurveyStore } from "~/stores/survey.js";
+import Qt_text from "~/components/respondent_view_question_types/qt_text.vue";
+import Qt_multiple_choice from "~/components/respondent_view_question_types/qt_multiple_choice.vue";
+import Qt_select_multiple from "~/components/respondent_view_question_types/qt_select_multiple.vue";
+
 const survey_store = useSurveyStore()
 // const { data: survey } = await useAsyncData(() => $cmsApi(survey_url + route.params._id));
 const { data: questions } = await survey_store.getQuestionsOfSurvey(route.params._id)
-var current_question_index = 0
+let current_question_index = ref(0)
 
-const survey = await responseStore.getResponse(route.params._id)
+// const survey = await responseStore.getResponse(route.params._id)
 
 
 // TODO: use an API to get n'th question of the selected survey
@@ -117,10 +102,19 @@ let resetClicked = false
 
 // to navigate from one question to the previous/next
 const prevQuestion = async () => {
+  console.log("Prev question")
+  current_question_index.value -= 1
+  current_question_index.value = Math.max(current_question_index.value, 0)
+  console.log(current_question_index.value)
     // TODO: Implement
 }
 const nextQuestion = async () => {
-    // TODO: Implement
+  console.log("Next question")
+
+  current_question_index.value += 1
+  current_question_index.value = Math.min(current_question_index.value, questions.value.length-1)
+  console.log(current_question_index.value)
+  console.log(questions.value[current_question_index.value].text)
 }
 
 // inspired by Roy J's solution on Stack Overflow:

@@ -54,10 +54,10 @@
 
 
 <script setup>
-
 import { ref } from "vue"
 import { navigateTo } from "nuxt/app";
-// import { useStoreResponse } from '~/stores/response'
+import { useSurveyStore } from "~/stores/survey.js";
+import { useStoreResponse } from '~/stores/response'
 // import leaflet from "leaflet"
 import "leaflet/dist/leaflet.css";
 import { LMap, LTileLayer, LCircle, LControl } from "@vue-leaflet/vue-leaflet";

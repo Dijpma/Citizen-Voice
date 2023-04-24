@@ -23,6 +23,7 @@ export const useUserStore = defineStore('user', {
     },
     getters: {
         isAuthenticated: (state) => state.userData.isAuthenticated,
+        getAuthToken: (state) => process.client ? localStorage.getItem('token') : state.userData.token
     },
     actions: {
         /**
@@ -129,10 +130,26 @@ export const useUserStore = defineStore('user', {
                 },
             }
 
-            let res
-
             try {
-                res = await $cmsApi('/api/auth/login/', config)
+                const res = await $cmsApi('/api/auth/login/', config)
+
+                if (res?.token) {
+                    this.userData = {
+                        ...this.userData,
+                        isAuthenticated: true,
+                        token: res.token,
+                        user: res.user,
+                        // ...res
+                    }
+                    localStorage.setItem('token', res.token)
+
+                    // NICETOHAVE: It mees like with the route `redirectedFrom` api you can get the previous link, you can use this to pass in the navigateTo function
+                    // See: https://nuxt.com/docs/api/composables/use-route
+                    await navigateTo('/design')
+
+                    // Notification
+                    global.succes('Login complete')
+                }
             }
             catch (e) {
                 // For debugging
@@ -145,22 +162,6 @@ export const useUserStore = defineStore('user', {
 
                 // Notification
                 global.warning(e.data.data.non_field_errors[0])
-            }
-
-            if (res?.token) {
-                this.userData = {
-                    ...this.userData,
-                    isAuthenticated: true,
-                    token: res.token,
-                    user: res.user,
-                    // ...res
-                }
-                localStorage.setItem('token', this.userData.token)
-                // Notification
-                global.succes('Login complete')
-                // NICETOHAVE: It mees like with the route `redirectedFrom` api you can get the previous link, you can use this to pass in the navigateTo function
-                // See: https://nuxt.com/docs/api/composables/use-route
-                await navigateTo('/design')
             }
 
         },
@@ -193,13 +194,12 @@ export const useUserStore = defineStore('user', {
             await $cmsApi('/api/auth/logout/', config).then(async () => {
                 localStorage.removeItem('token')
                 this.$reset()
+                // Navigate to home
+                await navigateTo('/')
                 // Notification
                 global.succes('Logged-out successfully')
-                await navigateTo('/')
             }).catch(err => {
                 global.warning('Something went wrong')
-            }).finally(() => {
-                return
             })
 
         },

@@ -11,7 +11,11 @@ export default defineNuxtConfig({
         transpile: ["vuetify", "vue-toastification/nuxt"],
     },
     // For speeding up load time in development, loading in all components from external packages increases the loading time, here we disabling to auto imports
-    // components: false,
+    components: {
+        dirs: [
+            '~/components'
+        ]
+    },
     experimental: {
         inlineSSRStyles: false
     },
@@ -42,6 +46,7 @@ export default defineNuxtConfig({
     ],
     imports: {
         dirs: [
+            'stores',
             // Scan top-level modules      
             'composables',
             // ... or scan modules nested one level deep with a specific name and file extension      
@@ -50,7 +55,10 @@ export default defineNuxtConfig({
             'composables/**'
         ]
     },
-    // plugins: [''],
+    // plugins: [
+    //     //     { src: '@/plugins/vuedraggable' }
+    //     { src: '@/plugins/vuedraggable/index.js', ssr: false }
+    // ],
     vite: {
         define: {
             'process.env.DEBUG': false,
@@ -107,6 +115,13 @@ export default defineNuxtConfig({
             });
             return routes
         }
+    },
+    routeRules: {
+        // Render these routes with SPA // See: https://nuxt.com/docs/guide/concepts/rendering#route-rules
+        '/design/**': { ssr: false },
+        '/design/surveys/**': { ssr: false },
+        '/user/**': { ssr: false },
+        '/survey/**': { ssr: false },
     },
 })
 

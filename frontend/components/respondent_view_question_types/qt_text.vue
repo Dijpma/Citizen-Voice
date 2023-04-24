@@ -4,16 +4,16 @@
   <v-textarea label="Your answer" variant="outlined"></v-textarea>
 </template>
 
-<script>
+<script setup>
 // let question_index = ref(0)
 // let question = ref({})
-export default {
-  name: "qt_text",
-  props: {
-    question_index: Number,
-    question: Object,
-  }
-}
+// export default {
+//   name: "qt_text",
+// }
+const props = defineProps({
+  question_index: Number,
+  question: Object,
+})
 </script>
 
 <style scoped>

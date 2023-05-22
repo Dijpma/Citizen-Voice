@@ -4,7 +4,7 @@ by Pierre Sassoulas, 2022, version 1.4.0.
 Available at https://github.com/Pierre-Sassoulas/django-survey
 """
 
-from abc import update_abstractmethods
+# from abc import update_abstractmethods
 # Import geographic model since we will be saving location data
 from django.contrib.gis.db import models
 from .response import Response
@@ -23,5 +23,6 @@ class Answer(models.Model):
     created = models.DateTimeField(_("Creation date"))
     updated = models.DateTimeField(_("Last edited"))
     body = models.TextField(_("Answer Body"))
-    lon = models.FloatField()
-    lat = models.FloatField()
+
+    def __str__(self):
+        return f"Response {self.response.pk}:{self.question.text}"

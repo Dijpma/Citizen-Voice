@@ -5,14 +5,15 @@ const questionStore = useQuestionDesignStore()
 
 /**
  * This set a proxy for the q
- * @param {*} props 
+ * @param {*} props
  * @returns Question
- * 
+ *
  */
-const question = (props) => {
+const questionProxy = (props) => {
     return computed({
-        get: () => questionStore.currentQuestions[props.index],
+        get: () => questionStore.currentQuestions[props.questionIndex],
         set: (value) => {
+            const question = questionStore.currentQuestions[props.questionIndex]
             const updatedKeys = Object.keys(value).reduce((keys, key) => {
                 if (value[key] !== question[key]) {
                     keys.push(key)
@@ -22,7 +23,7 @@ const question = (props) => {
 
             if (updatedKeys.length > 0) {
                 const updatedQuestion = { ...question, ...value }
-                questionStore.setCurrentQuestionValue(props.index, updatedQuestion)
+                questionStore.setCurrentQuestionValue(props.questionIndex, updatedQuestion)
             }
         }
     })
@@ -30,4 +31,4 @@ const question = (props) => {
 
 
 
-export default question
+export default questionProxy

@@ -1,10 +1,3 @@
-# ====================================================================================================================
-#
-# Created with reference "Build a REST API in 30 minutes with Django REST Framework" by Bennett Garner, May 17, 2019
-# https://medium.com/swlh/build-your-first-rest-api-with-django-rest-framework-e394e39a482c
-#
-# ====================================================================================================================
-
 from rest_framework import serializers
 from .models import Answer, Question, Survey, Response, PointLocation, PolygonLocation, LineStringLocation, MapView
 from django.contrib.auth.models import User
@@ -24,11 +17,13 @@ class AnswerSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('response', 'question', 'created', 'updated', 'body')
 
 
-class QuestionSerializer(serializers.HyperlinkedModelSerializer):
+class QuestionSerializer(serializers.ModelSerializer):
     """
     Serialises 'text', 'order', 'required', 'question_type', 'choices', 'is_geospatial', 'map_view'
     fields of the Question model for the API.
     """
+    survey = serializers.PrimaryKeyRelatedField(queryset=Survey.objects.all())
+
     class Meta:
         model = Question
         fields = ('id', 'text', 'order', 'required', 'question_type',
@@ -49,16 +44,19 @@ class QuestionSerializer(serializers.HyperlinkedModelSerializer):
         return question
 
 
-class ResponseSerializer(serializers.HyperlinkedModelSerializer):
+class ResponseSerializer(serializers.ModelSerializer):
     """
-    Serialises 'created', 'updated', 'survey', 'interview_uuid', 'respondent'
+    Serializes 'created', 'updated', 'survey', 'interview_uuid', 'respondent'
     fields of the Response model for the API.
     """
+    survey = serializers.PrimaryKeyRelatedField(queryset=Survey.objects.all())
+
     class Meta:
         model = Response
         fields = ('created', 'updated', 'survey',
                   'interview_uuid')
 
+# TODO: change this to use serializers.ModelSerializer (PrimaryKeyRelatedField)
 
 class SurveySerializer(serializers.HyperlinkedModelSerializer):
     """
@@ -72,6 +70,8 @@ class SurveySerializer(serializers.HyperlinkedModelSerializer):
                   'publish_date', 'expire_date', 'public_url', 'designer')
 
 
+# TODO: change this to use serializers.ModelSerializer (PrimaryKeyRelatedField)
+
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     """
     Serialises 'id', 'username', 'first_name', 'last_name', 'email'
@@ -81,6 +81,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         model = User
         fields = ('id', 'username', 'first_name', 'last_name', 'email')
 
+# TODO: change this to use serializers.ModelSerializer (PrimaryKeyRelatedField)
 
 class PointLocationSerializer(serializers.HyperlinkedModelSerializer):
     """
@@ -90,6 +91,7 @@ class PointLocationSerializer(serializers.HyperlinkedModelSerializer):
         model = PointLocation
         fields = ('location', 'name', 'question', 'answer')
 
+# TODO: change this to use serializers.ModelSerializer (PrimaryKeyRelatedField)
 
 class PolygonLocationSerializer(serializers.HyperlinkedModelSerializer):
     """
@@ -99,6 +101,7 @@ class PolygonLocationSerializer(serializers.HyperlinkedModelSerializer):
         model = PolygonLocation
         fields = ('location', 'name', 'question', 'answer')
 
+# TODO: change this to use serializers.ModelSerializer (PrimaryKeyRelatedField)
 
 class LineStringLocationSerializer(serializers.HyperlinkedModelSerializer):
     """
@@ -116,4 +119,6 @@ class MapViewSerializer(serializers.HyperlinkedModelSerializer):
     """
     class Meta:
         model = MapView
-        fields = ('name', 'map_service_url', 'options')
+#         fields = ('name', 'map_service_url', 'options')
+        fields = ('id', 'name', 'map_service_url', 'options', 'geojson')
+

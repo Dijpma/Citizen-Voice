@@ -49,6 +49,73 @@
                   <span class="q-pa-sm">Next Question</span>
               </v-btn>
           </div>
+<!--=======-->
+<!--            &lt;!&ndash; Question card: number & text &ndash;&gt;-->
+<!--            <v-card v-for="question in questions" class="my-card">-->
+<!--                <div class="text-h2 q-mt-sm q-mb-xs">Question {{ question.order }}</div>-->
+<!--                <div class="text-h5 q-mt-sm q-mb-xs">{{ question.text }}</div>-->
+<!--            </v-card>-->
+
+
+<!--            <div class="">-->
+<!--                &lt;!&ndash; Map card-->
+<!--          real v-if statement = (question.map_view != null || question.is_geospatial)&ndash;&gt;-->
+<!--                &lt;!&ndash;            <v-card v-if="question.is_geospatial" style="min-width: 300px;" class="my-card col">&ndash;&gt;-->
+<!--                &lt;!&ndash;                <div class="text-h5 q-mt-sm q-mb-xs">Map here</div>&ndash;&gt;-->
+<!--                &lt;!&ndash;                <div id="map"></div>&ndash;&gt;-->
+<!--                &lt;!&ndash;            </v-card>&ndash;&gt;-->
+<!--            </div>-->
+
+<!--            <div class="my-card">-->
+<!--                <div class="text-h2 q-mt-sm q-mb-xs">Question {{ $route.params._question }}</div>-->
+<!--                <div class="text-h5 q-mt-sm q-mb-xs">{{ question.text }}</div>-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--        <div class="q-pa-md row items-start q-gutter-md">-->
+<!--            &lt;!&ndash; Map card &ndash;&gt;-->
+<!--            <div v-show="(question.map_view != null || question.is_geospatial)" style="min-width: 600px;"-->
+<!--                class="my-card col">-->
+<!--                <div style="height:300px; width:600px">-->
+<!--                    <l-map ref="map" v-model:zoom="map_view.options.zoom" :center="map_view.options.center" :minZoom="1"-->
+<!--                        :maxZoom="18" @click="addCircle">-->
+<!--                        <l-tile-layer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" layer-type="base"-->
+<!--                            name="OpenStreetMap"></l-tile-layer>-->
+<!--                        <l-circle v-for="circle, index in map_view.options.points" :lat-lng="circle"-->
+<!--                            :radius="map_view.options.radius" :color="map_view.options.color"-->
+<!--                            :fillColor="map_view.options.fillColor"></l-circle>-->
+<!--                        <l-circle v-for="circle, index in circles" @click="removeCircle(index)" :lat-lng="circle"-->
+<!--                            :radius="map_view.options.radius" :color="map_view.options.color"-->
+<!--                            :fillColor="map_view.options.fillColor"></l-circle>-->
+<!--                        <l-control position="bottomleft">-->
+<!--                            <v-btn @click="resetMap">-->
+<!--                                Reset-->
+<!--                            </v-btn>-->
+<!--                        </l-control>-->
+<!--                    </l-map>-->
+<!--                </div>-->
+<!--            </div>-->
+
+<!--            &lt;!&ndash; Answer card&ndash;&gt;-->
+<!--            <div class="my-card col">-->
+<!--                <v-textarea name="title" v-model="answer_field" type="textarea" label="Give answer here"></v-textarea>-->
+<!--            </div>-->
+
+
+<!--        </div>-->
+
+<!--        &lt;!&ndash; Navigation &ndash;&gt;-->
+<!--        <div class="q-pa-md row">-->
+<!--            <v-btn @click="prevQuestion" color="primary">-->
+<!--                <i class="fa-solid fa-arrow-left"></i>-->
+<!--                <span class="q-pa-sm">Previous Question</span>-->
+<!--            </v-btn>-->
+<!--            <v-space />-->
+<!--            <v-btn @click="nextQuestion" color="primary">-->
+<!--                <i class="fa-solid fa-arrow-right"></i>-->
+<!--                <span class="q-pa-sm">Next Question</span>-->
+<!--            </v-btn>-->
+<!--&gt;>>>>>> upstream/devel-->
         </div>
 
     </NuxtLayout>
@@ -60,12 +127,13 @@ import { ref } from "vue"
 import { navigateTo } from "nuxt/app";
 import { useSurveyStore } from "~/stores/survey.js";
 import { useStoreResponse } from '~/stores/response'
-
 // import leaflet from "leaflet"
 import "leaflet/dist/leaflet.css";
 import { LMap, LTileLayer, LCircle, LControl } from "@vue-leaflet/vue-leaflet";
 
+
 // const responseStore = useStoreResponse()
+const responseStore = useStoreResponse()
 const question_url = "/api/questions/"
 const mapview_url = "/api/map_views/"
 
@@ -84,7 +152,6 @@ const survey_store = useSurveyStore()
 const { data: questions } = await survey_store.getQuestionsOfSurvey(route.params._id)
 const answers = ref([])
 let current_question_index = ref(0)
-const responseStore = useStoreResponse()
 
 questions.value.forEach(function (item, index) {
   const responseId = 999
@@ -100,6 +167,15 @@ console.log(answers)
 function printToConsole(someVal) {
   console.log(someVal)
 }
+// =======
+// const survey_store = useSurveyStore()
+// // const { data: survey } = await useAsyncData(() => $cmsApi(survey_url + route.params._id));
+// const { data: questions } = await survey_store.getQuestionsOfSurvey(route.params._id)
+// var current_question_index = 0
+//
+// const survey = await responseStore.getResponse(route.params._id)
+//
+// >>>>>>> upstream/devel
 
 // TODO: use an API to get n'th question of the selected survey
 let demo_question = 3 // This is a hardcoded value for now
@@ -127,7 +203,6 @@ const circles = ref([]) // this is what user will add
 // if that is the case, we will not call the addCircle function
 let circleClickedAndRemoved = false
 let resetClicked = false
-
 
 // created = models.DateTimeField(_("Creation date"))
 // updated = models.DateTimeField(_("Last edited"))
@@ -186,7 +261,20 @@ const submitSurvey = ()=> {
 
 const updateAnswers = (answer, index) => {
   answers.value[index] = answer
-}
+// to navigate from one question to the previous/next
+// const prevQuestion = async () => {
+//     // if this is not the first question:
+//     let question_to_navigate = (parseInt(route.params._question, 10) - 1)
+//     if (question_to_navigate != 0) {
+//         return navigateTo('/survey/' + route.params._id + '/' + question_to_navigate)
+//     } else {
+//         return navigateTo('/survey/' + route.params._id)
+//     }
+// }
+// const nextQuestion = async () => {
+//     // if this is not the last question:
+//     return navigateTo('/survey/' + route.params._id + '/' + (parseInt(route.params._question, 10) + 1))
+// }
 
 // inspired by Roy J's solution on Stack Overflow:
 // https://stackoverflow.com/questions/54499070/leaflet-and-vuejs-how-to-add-a-new-marker-onclick-in-the-map
@@ -213,7 +301,7 @@ const resetMap = async () => {
     // TODO: reset map center and zoom level based on map_view
     resetClicked = true
 }
-
+}
 </script>
 
 <style lang="scss">

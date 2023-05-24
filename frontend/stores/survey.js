@@ -50,7 +50,9 @@ export const useSurveyStore = defineStore('survey', {
                 config.headers['Authorization'] = `Token ${token}`
             }
 
-            return await useAsyncData('surveys', () => $cmsApi('/api/surveys/', config))
+            const data = await useAsyncData('surveys', () => $cmsApi('/api/surveys', config))
+            return data
+
         },
 
         /**
@@ -108,14 +110,15 @@ export const useSurveyStore = defineStore('survey', {
                 return null
 
             }
+            console.log('register?.value //> ', register.value.id)
             if (register?.value) {
                 // Notification
                 global.succes('createSurvey complete')
-                this.id = 1
+                this.id = register.value.id
                 return register.value
             }
-            // TODO: Return the id of the created survey
-            return 1
+
+            return this.id
         },
 
         /**

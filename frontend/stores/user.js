@@ -64,7 +64,7 @@ export const useUserStore = defineStore('user', {
         },
         /**
          * Register user
-         * @param {username, email, password} body 
+         * @param {username, email, password} body
          */
         async registerUser(body) {
             const global = useGlobalStore()
@@ -81,8 +81,7 @@ export const useUserStore = defineStore('user', {
 
             try {
                 res = await $cmsApi('/api/auth/register/', config)
-            }
-            catch (e) {
+            } catch (e) {
                 // For debugging
                 // console.error('statusCode:', e.statusCode)
                 // console.error('statusMessage:', e.statusMessage)
@@ -110,8 +109,8 @@ export const useUserStore = defineStore('user', {
         },
         /**
          * Login user
-         * @param {*} email 
-         * @param {*} password 
+         * @param {*} email
+         * @param {*} password
          * TODO: add pending functionality
          */
         async loginUser(
@@ -150,8 +149,7 @@ export const useUserStore = defineStore('user', {
                     // Notification
                     global.succes('Login complete')
                 }
-            }
-            catch (e) {
+            } catch (e) {
                 // For debugging
                 // console.error('statusCode:', e.statusCode)
                 // console.error('statusMessage:', e.statusMessage)
@@ -161,7 +159,11 @@ export const useUserStore = defineStore('user', {
                 this.userData.isAuthenticated = false
 
                 // Notification
-                global.warning(e.data.data.non_field_errors[0])
+                if (e.data.data) {
+                    global.warning(e.data.data.non_field_errors[0])
+                } else {
+                    global.warning("Something went wrong with the login")
+                }
             }
 
         },

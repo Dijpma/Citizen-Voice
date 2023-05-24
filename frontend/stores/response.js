@@ -43,6 +43,14 @@ export const useStoreResponse = defineStore('response', {
                 body: {
                     // survey: '/api/surveys/' + surveyPK + "/",
                     survey: surveyPK,
+// =======
+//                 },
+//                 method: 'POST',
+//                 //   // Pass the data for the new Response object as the request body
+//                 //   // TODO: have the respondent set to the logged in user
+//                 body: {
+//                     survey: '/api/surveys/' + id + "/",
+// >>>>>>> upstream/devel
                     interview_uuid: "123",
                     respondent: "/api/users/me/"
                 },

@@ -1,13 +1,19 @@
 from .models import Answer, Question, Survey, Response, PointLocation, PolygonLocation, LineStringLocation, MapView
+from django.http import HttpResponse
+from .permissions import IsAuthenticatedAndSelfOrMakeReadOnly, IsAuthenticatedAndSelf
 from rest_framework.decorators import api_view
 from rest_framework.mixins import UpdateModelMixin
+from rest_framework.response import Response
 from django.middleware import csrf
 from django.http import HttpResponse
+from django.utils import timezone
 from rest_framework import viewsets, status
 from .serializers import AnswerSerializer, PointLocationSerializer, PolygonLocationSerializer, \
     LineStringLocationSerializer, QuestionSerializer, SurveySerializer, ResponseSerializer, UserSerializer, \
     MapViewSerializer
+
 from rest_framework.permissions import AllowAny, IsAuthenticated
+
 from django.contrib.auth.models import User
 from datetime import datetime
 from django.shortcuts import get_object_or_404
@@ -26,6 +32,8 @@ class AnswerViewSet(viewsets.ModelViewSet):
     """
     Answer ViewSet used internally to query data from database.
     """
+    # Figure out the permissions for the answers, do designers to to see them?
+    # permission_classes = [IsAuthenticatedAndSelfOrMakeReadOnly]
     serializer_class = AnswerSerializer
 
     def get_queryset(self):
@@ -73,6 +81,7 @@ class QuestionViewSet(viewsets.ModelViewSet, UpdateModelMixin):
     Question ViewSet used to query data from database.
     The `create` method is overwritten to accept one data object or a array of objects.
     """
+    permission_classes = [IsAuthenticatedAndSelfOrMakeReadOnly]
     queryset = Question.objects.all()
     serializer_class = QuestionSerializer
 
@@ -153,7 +162,7 @@ class SurveyViewSet(viewsets.ModelViewSet):
     Survey ViewSet used internally to query data from database.
 
     """
-#     permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticatedAndSelfOrMakeReadOnly]
     serializer_class = SurveySerializer
 
     def get_queryset(response):
@@ -176,8 +185,8 @@ class SurveyViewSet(viewsets.ModelViewSet):
         if (type(user) == User):
             surveys_of_user = Survey.objects.all().filter(designer=user.id).order_by('name')
             survey_serializer = self.get_serializer(surveys_of_user, many=True)
-            print("User Id: ", user.id)
-            print(survey_serializer.data)
+            # print("User Id: ", user.id)
+            # print(survey_serializer.data)
             return rf_response(survey_serializer.data)
 
         return rf_response({})
@@ -191,12 +200,15 @@ class SurveyViewSet(viewsets.ModelViewSet):
             survey_name = self.request.data["name"]
             survey_description = self.request.data["description"]
             once_up_a_time = datetime.now()
-            req = request
+
+            tz_aware_datetime = timezone.make_aware(once_up_a_time)  # Convert to timezone-aware datetime
 
             survey = Survey(name=survey_name, description=survey_description,
-                            publish_date=once_up_a_time, expire_date=once_up_a_time, designer=user)
+                            publish_date=tz_aware_datetime, expire_date=tz_aware_datetime, designer=user)
             survey.save()
-            print(survey)
+
+            survey_serializer = SurveySerializer(survey, context={'request': request})  # Pass the request context
+            return rf_response(survey_serializer.data)
         else:
             print("User was anonymous")
         return rf_response(None)
@@ -292,7 +304,6 @@ class ResponseViewSet(viewsets.ModelViewSet):
     """
 
     serializer_class = ResponseSerializer
-
 
 
     def get_queryset(response):
@@ -422,6 +433,7 @@ class UserViewSet(viewsets.ModelViewSet):
     User ViewSet used internally to query data from database for all users.
     """
 
+    permission_classes = [IsAuthenticatedAndSelf]
     serializer_class = UserSerializer
 
     def get_queryset(response):
@@ -601,3 +613,8 @@ class MapViewViewSet(viewsets.ModelViewSet):
 
         queryset = MapView.objects.all()
         return queryset
+
+    @action(detail=False, methods=['get'])
+    def id_names(self, request):
+        mapviews = MapView.objects.values('id', 'name')
+        return Response(mapviews)

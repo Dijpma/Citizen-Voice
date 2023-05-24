@@ -3,7 +3,6 @@ from django.http import HttpResponse
 from .permissions import IsAuthenticatedAndSelfOrMakeReadOnly, IsAuthenticatedAndSelf
 from rest_framework.decorators import api_view
 from rest_framework.mixins import UpdateModelMixin
-from rest_framework.response import Response
 from django.middleware import csrf
 from django.http import HttpResponse
 from django.utils import timezone

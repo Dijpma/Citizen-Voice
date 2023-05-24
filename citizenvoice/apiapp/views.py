@@ -341,6 +341,37 @@ class ResponseViewSet(viewsets.ModelViewSet):
             #answer.save()
         return rf_response(None)
 
+#    @action(detail=True, methods=['GET'], url_path='questions')
+#     def get_questions_of_survey(self, request, pk=None):
+
+    @action(detail=False, methods=['GET'], url_path='create-response')
+    def createResponse(self, request, *args, **kwargs):
+        print("creating Response")
+        time = datetime.now()
+        survey = Survey.objects.get(pk=1)
+        print(survey)
+
+        user = self.request.user
+        resp = None
+        if type(user) is User:
+            resp = Response(created=time, updated=time, survey=survey)
+            print(resp)
+        else:
+            print("User was anonymous")
+            resp = Response(created=time, updated=time, survey=survey)
+            print(resp)
+#             resp.save()
+
+        response_serializer = ResponseSerializer(resp, context={'request': request})
+        print(response_serializer.data)
+#             return rf_response(question_serializer.data)
+#         created = models.DateTimeField(_("Date response was submitted"), auto_now_add=True)
+#         updated = models.DateTimeField(_("Last edit"), auto_now=True)
+#         survey = models.ForeignKey(Survey, on_delete=models.CASCADE)
+#         interview_uuid = models.CharField(_("Unique ID of interview"), max_length=150)
+#         respondent = models.ForeignKey(User, on_delete=models.CASCADE)
+        return rf_response(response_serializer.data)
+
     @staticmethod
     def GetResponseByID(id):
         """

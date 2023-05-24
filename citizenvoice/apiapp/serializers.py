@@ -57,7 +57,7 @@ class ResponseSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Response
         fields = ('created', 'updated', 'survey',
-                  'interview_uuid', 'respondent')
+                  'interview_uuid')
 
 
 class SurveySerializer(serializers.HyperlinkedModelSerializer):

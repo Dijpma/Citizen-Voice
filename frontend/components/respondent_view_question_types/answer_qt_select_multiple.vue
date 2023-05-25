@@ -1,6 +1,4 @@
 <template>
-  <h2>Question {{question_index + 1}}</h2>
-  <h2>{{question.text}}</h2>
   <v-container fluid @input="event => updateAnswer(event)">
 <!--    <p>{{ selected }}</p>-->
     <v-checkbox

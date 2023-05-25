@@ -17,7 +17,7 @@
 
 <script>
 export default {
-  name: "answer_qt_select_multiple",
+  name: "AnswerTypeSelectMultiple",
 }
 </script>
 

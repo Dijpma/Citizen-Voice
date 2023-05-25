@@ -6,7 +6,7 @@
 
 <script>
 export default {
-  name: "answer_qt_text",
+  name: "AnswerTypeText",
 }
 </script>
 

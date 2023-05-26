@@ -1,16 +1,11 @@
 <template>
-  <v-text-field
-    @input="event => updateAnswer(event)"
-    hide-details
-    single-line
-    type="number"
-  />
+  <v-text-field @input="event => updateAnswer(event)" type="date" label="Date"></v-text-field>
 </template>
 <!--    v-model="props.answer"-->
 
 <script>
 export default {
-  name: "AnswerTypeInteger"
+  name: "AnswerTypeDate",
 }
 </script>
 
@@ -34,3 +29,4 @@ function updateAnswer(event) {
 <style scoped>
 
 </style>
+
